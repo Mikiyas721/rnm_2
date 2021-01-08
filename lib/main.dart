@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import './injector.dart';
+import './ui/pages/locationCharactersPage.dart';
+import './ui/pages/locationsPage.dart';
 import './ui/pages/characterEpisodesPage.dart';
 import './ui/pages/characterPage.dart';
 import './ui/pages/episodePage.dart';
 import './ui/pages/homePage.dart';
+import './injector.dart';
+
 
 void main() {
   register();
@@ -26,4 +29,6 @@ final routes = {
   '/characterPage': (BuildContext context) => CharacterPage(),
   '/characterEpisodesPage': (BuildContext context) => CharacterEpisodesPage(),
   '/episodePage': (BuildContext context) => EpisodePage(),
+  '/locationsPage': (BuildContext context) => LocationsPage(),
+  '/locationCharactersPage': (BuildContext context) => LocationCharactersPage(),
 };

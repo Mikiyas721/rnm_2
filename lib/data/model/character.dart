@@ -29,7 +29,7 @@ class Character {
   });
 
   factory Character.fromJson(Map<String, dynamic> map){
-    return Character(
+    return map??Character(
         id: map['id'],
         name: map['name'],
         status: map['status'],
@@ -39,8 +39,11 @@ class Character {
         origin: map['origin'],
         location: map['location'],
         image: map['image'],
-        episode: map['episode'],
+        episode: Episode.fromList(map['episode']),
         created: map['created']
     );
+  }
+  static List<Character> fromList(List<Map<String, dynamic>> maps){
+    return maps.map((map) => Character.fromJson(map)).toList();
   }
 }

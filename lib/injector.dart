@@ -6,4 +6,5 @@ void register() {
   instance.registerLazySingleton(() => BehaviorSubject<List>(),instanceName: 'Characters');
   instance.registerLazySingleton(() => BehaviorSubject<List>(),instanceName: 'RecentCharacters');
   instance.registerLazySingleton(() => BehaviorSubject<List>(),instanceName: 'Episodes');
+  instance.registerLazySingleton(() => BehaviorSubject<List>(),instanceName: 'Locations');
 }

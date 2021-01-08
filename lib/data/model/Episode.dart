@@ -18,13 +18,16 @@ class Episode {
   });
 
   factory Episode.fromJson(Map<String, dynamic> map) {
-    return Episode(
+    return map??Episode(
       id: map['id'],
       name: map['name'],
       airDate: map['air_date'],
       episode: map['episode'],
-      characters: map['characters'],
+      characters: Character.fromList(map['characters']),
       created: map['created'],
     );
+  }
+  static List<Episode> fromList(List<Map<String, dynamic>> maps){
+    return maps.map((map) => Episode.fromJson(map)).toList();
   }
 }

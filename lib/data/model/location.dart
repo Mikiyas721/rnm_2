@@ -18,13 +18,16 @@ class Location {
   });
 
   factory Location.fromJson(Map<String, dynamic> map) {
-    return Location(
+    return map??Location(
       id: map['id'],
       name: map['name'],
       type: map['type'],
       dimension: map['dimension'],
-      residents: map['residents'],
+      residents: Character.fromList(map['residents']),
       created: map['created'],
     );
+  }
+  static List<Location> fromList(List<Map<String, dynamic>> maps){
+    return maps.map((map) => Location.fromJson(map)).toList();
   }
 }

@@ -29,7 +29,13 @@ class _HomePageState extends State<HomePage> {
         title: CupertinoTextField(
           placeholder: 'Search',
         ),
-        actions: [IconButton(icon: Icon(Icons.location_on), onPressed: () {})],
+        actions: [
+          IconButton(
+              icon: Icon(Icons.location_on),
+              onPressed: () {
+                Navigator.pushNamed(context, '/locationsPage');
+              })
+        ],
       ),
       body: BlocProvider(
           blocSource: () => CharacterBloc(),
