@@ -1,8 +1,7 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:rnm/data/model/Episode.dart';
-import 'package:rnm/ui/customWidgets/myText.dart';
+import '../../data/model/Episode.dart';
+import '../../ui/customWidgets/myText.dart';
 
 class EpisodeCard extends StatelessWidget {
   final Episode episode;

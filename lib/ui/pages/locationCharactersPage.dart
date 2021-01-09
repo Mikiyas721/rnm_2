@@ -10,23 +10,27 @@ class LocationCharactersPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(location.name),
       ),
-      body: ListView.builder(itemBuilder: (BuildContext context, int index) {
-        return ListTile(
-          leading: CircleAvatar(
-            backgroundImage: NetworkImage(location.residents[index].image),
-          ),
-          title: Text(location.residents[index].name),
-          onTap: () {
-            showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return CharacterDialog(
-                    character: location.residents[index],
-                  );
-                });
-          },
-        );
-      }),
+      body: ListView.builder(
+          itemCount: location.residents.length,
+          itemBuilder: (BuildContext context, int index) {
+            return ListTile(
+              leading: CircleAvatar(
+                backgroundImage: NetworkImage(location.residents[index].image),
+              ),
+              title: Text(location.residents[index].name),
+              onTap: () {
+                showDialog(
+                    barrierColor: Colors.black54,
+                    barrierDismissible: false,
+                    context: context,
+                    builder: (BuildContext context) {
+                      return CharacterDialog(
+                        character: location.residents[index],
+                      );
+                    });
+              },
+            );
+          }),
     );
   }
 }

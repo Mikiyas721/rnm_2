@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:rnm/data/bloc/locationBloc.dart';
-import 'package:rnm/data/bloc/provider/provider.dart';
 import 'package:rnm/data/model/location.dart';
+import 'package:rnm/ui/customWidgets/myText.dart';
+import '../../data/bloc/locationBloc.dart';
+import '../../data/bloc/provider/provider.dart';
 
 class LocationsPage extends StatefulWidget {
   @override
@@ -26,73 +27,101 @@ class _LocationsPageState extends State<LocationsPage> {
         body: BlocProvider(
             blocSource: () => LocationBloc(),
             builder: (BuildContext context, LocationBloc bloc) {
+              bloc.loadLocations();
               return StreamBuilder(
                   stream: bloc.locationsStream,
-                  builder: (BuildContext context,
-                      AsyncSnapshot<List> snapshot) {
+                  builder:
+                      (BuildContext context, AsyncSnapshot<List> snapshot) {
                     return snapshot.data == null
                         ? Center(
                             child: CircularProgressIndicator(),
                           )
-                        : ExpansionPanelList(
-                            expansionCallback: (int index, bool isExpanded) {
-                              setState(() {
-                                isExpanded
-                                    ? expandedTileIndex = index
-                                    : expandedTileIndex = -1;
-                              });
-                            },
-                            children: List.generate(snapshot.data.length,
-                                (int index) {
-                              return ExpansionPanel(
-                                headerBuilder:
-                                    (BuildContext context, bool value) {
-                                  return ListTile(
-                                    leading: Icon(Icons.location_on),
-                                    title: Text('${snapshot.data[index].name}'),
-                                    trailing: IconButton(
-                                        icon: Icon(Icons.star),
-                                        onPressed: () {}),
-                                  );
+                        : ListView(
+                            children: [
+                              ExpansionPanelList(
+                                expandedHeaderPadding:
+                                    EdgeInsets.symmetric(vertical: 8),
+                                expansionCallback:
+                                    (int index, bool isExpanded) {
+                                  print('$index $isExpanded');
+                                  setState(() {
+                                    isExpanded
+                                        ? expandedTileIndex = -1
+                                        : expandedTileIndex = index;
+                                  });
                                 },
-                                body: Column(
-                                  children: [
-                                    RichText(
-                                        text: TextSpan(children: [
-                                      TextSpan(text: 'Type: '),
-                                      TextSpan(text: snapshot.data[index].type)
-                                    ])),
-                                    RichText(
-                                        text: TextSpan(children: [
-                                      TextSpan(text: 'Created: '),
-                                      TextSpan(
-                                          text: snapshot.data[index].created)
-                                    ])),
-                                    RichText(
-                                        text: TextSpan(children: [
-                                      TextSpan(text: 'Dimension: '),
-                                      TextSpan(
-                                          text: snapshot.data[index].dimension)
-                                    ])),
-                                    RaisedButton(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(10))),
-                                      onPressed: () {
-                                        Navigator.pushNamed(
-                                            context, '/locationCharactersPage',
-                                            arguments: snapshot.data[index]);
-                                      },
-                                      child: Text(
-                                          '${snapshot.data[index].residents.length} Residents'),
-                                    )
-                                  ],
-                                ),
-                                isExpanded:
-                                    expandedTileIndex == index ? true : false,
-                                canTapOnHeader: true,
-                              );
-                            }),
+                                children: List.generate(snapshot.data.length,
+                                    (int index) {
+                                  Location location =
+                                      Location.fromJson(snapshot.data[index]);
+                                  return ExpansionPanel(
+                                    headerBuilder:
+                                        (BuildContext context, bool value) {
+                                      return ListTile(
+                                        leading: IconButton(
+                                            icon: Icon(Icons.star),
+                                            onPressed: () {}),
+                                        title: Text(location.name),
+                                      );
+                                    },
+                                    body: Padding(
+                                      padding: EdgeInsets.only(left: 30),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          MyText(
+                                            label: 'Type',
+                                            value: location.type,
+                                            padding: EdgeInsets.all(0),
+                                          ),
+                                          MyText(
+                                            label: 'Created',
+                                            value: location.created,
+                                            padding: EdgeInsets.all(0),
+                                          ),
+                                          MyText(
+                                            label: 'Dimension',
+                                            value: location.dimension,
+                                            padding: EdgeInsets.all(0),
+                                          ),
+                                          SizedBox(height: 20),
+                                          Center(
+                                            child: RaisedButton(
+                                              padding: EdgeInsets.only(
+                                                  left: 70,
+                                                  right: 70,
+                                                  top: 10,
+                                                  bottom: 10),
+                                              color: Colors.blue.shade400,
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(20))),
+                                              onPressed: () {
+                                                Navigator.pushNamed(context,
+                                                    '/locationCharactersPage',
+                                                    arguments: location);
+                                              },
+                                              child: Text(
+                                                '${location.residents.length} Resident(s)',
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(height: 10)
+                                        ],
+                                      ),
+                                    ),
+                                    isExpanded: expandedTileIndex == index
+                                        ? true
+                                        : false,
+                                    canTapOnHeader: true,
+                                  );
+                                }),
+                              ),
+                            ],
                           );
                   });
             }));

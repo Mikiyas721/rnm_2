@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:rnm/data/model/Episode.dart';
-import 'package:rnm/data/model/character.dart';
+import '../../data/model/Episode.dart';
+import '../../data/model/character.dart';
 import '../../data/bloc/characterBloc.dart';
 import '../../data/bloc/episodeBloc.dart';
 import '../../data/bloc/provider/provider.dart';
@@ -19,7 +19,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    selectedPage = 0;
+    selectedPage = 2;
     super.initState();
   }
 

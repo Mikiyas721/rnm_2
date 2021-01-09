@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:rnm/ui/customWidgets/characterCard.dart';
+import '../../ui/customWidgets/characterCard.dart';
+import '../../ui/customWidgets/myText.dart';
 import '../../data/model/Episode.dart';
 
 class EpisodePage extends StatelessWidget {
@@ -18,7 +19,6 @@ class EpisodePage extends StatelessWidget {
               height: 15,
             ),
             Card(
-              color: Colors.black38,
               margin: EdgeInsets.only(top: 15, bottom: 15),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(20))),
@@ -29,37 +29,25 @@ class EpisodePage extends StatelessWidget {
                   children: [
                     Text('Full Information',
                         style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.white)),
-                    RichText(
-                        text: TextSpan(
-                            style: TextStyle(fontSize: 16),
-                            children: [
-                          TextSpan(text: '\nEpisode: '),
-                          TextSpan(text: episode.episode)
-                        ])),
-                    RichText(
-                        text: TextSpan(
-                            style: TextStyle(fontSize: 16),
-                            children: [
-                          TextSpan(text: 'Name: '),
-                          TextSpan(text: episode.name)
-                        ])),
-                    RichText(
-                        text: TextSpan(
-                            style: TextStyle(fontSize: 16),
-                            children: [
-                          TextSpan(text: 'Air Date: '),
-                          TextSpan(text: episode.airDate)
-                        ])),
-                    RichText(
-                        text: TextSpan(
-                            style: TextStyle(fontSize: 16),
-                            children: [
-                          TextSpan(text: 'Created: '),
-                          TextSpan(text: episode.created)
-                        ])),
+                          fontSize: 24,
+                          fontWeight: FontWeight.w500,
+                        )),
+                    MyText(
+                        label: '\nEpisode',
+                        value: episode.episode,
+                        padding: EdgeInsets.all(0)),
+                    MyText(
+                        label: 'Name',
+                        value: episode.name,
+                        padding: EdgeInsets.all(0)),
+                    MyText(
+                        label: 'Air Date',
+                        value: episode.airDate,
+                        padding: EdgeInsets.all(0)),
+                    MyText(
+                        label: 'Created',
+                        value: episode.created,
+                        padding: EdgeInsets.all(0)),
                   ],
                 ),
               ),

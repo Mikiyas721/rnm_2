@@ -54,6 +54,7 @@ class APIQuery {
                }
                """);
   }
+
   Future<QueryResult> getEpisodes() {
     return _query("""
                query GetEpisodes{
@@ -80,6 +81,35 @@ class APIQuery {
                        }
                        image
                        created
+                       episode{
+                         id
+                       }
+                     }
+                     created
+                   }
+                 }
+               }
+               """);
+  }
+
+  Future<QueryResult> getLocations() {
+    return _query("""
+               query GetLocations{
+                 locations {
+                   results {
+                     id
+                     name
+                     type
+                     dimension
+                     residents{
+                       id
+                       name
+                       status
+                       species
+                       type
+                       gender
+                       image
+                       created                  
                      }
                      created
                    }
