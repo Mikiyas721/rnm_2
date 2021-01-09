@@ -18,27 +18,29 @@ class CharacterCard extends StatelessWidget {
         },
         child: isActive == null
             ? Container(
+                height: 270,
                 margin: EdgeInsets.only(bottom: 10),
                 decoration: BoxDecoration(
                     image: DecorationImage(
                         image: NetworkImage(character.image),
-                        fit: BoxFit.cover),
+                        fit: BoxFit.fill),
                     borderRadius: BorderRadius.all(Radius.circular(20))),
               )
             : Column(
                 children: [
                   Container(
-                    margin: EdgeInsets.only(bottom: 10),
+                    height: 200,
+                    margin: EdgeInsets.only(bottom: 10,right: 5,top: 20),
                     decoration: BoxDecoration(
                         image: DecorationImage(
                             image: NetworkImage(character.image),
-                            fit: BoxFit.cover),
+                            fit: BoxFit.fill),
                         borderRadius: BorderRadius.all(Radius.circular(20))),
                   ),
                   Text(
                     character.name,
                     style:
-                        TextStyle(color: isActive ? Colors.white : Colors.grey),
+                        TextStyle(color: isActive ? Colors.black : Colors.grey),
                   )
                 ],
               ),

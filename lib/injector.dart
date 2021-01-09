@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:rnm/utils/apiQuery.dart';
 import 'package:rxdart/rxdart.dart';
 
 void register() {
@@ -7,4 +8,5 @@ void register() {
   instance.registerLazySingleton(() => BehaviorSubject<List>(),instanceName: 'RecentCharacters');
   instance.registerLazySingleton(() => BehaviorSubject<List>(),instanceName: 'Episodes');
   instance.registerLazySingleton(() => BehaviorSubject<List>(),instanceName: 'Locations');
+  instance.registerLazySingleton(() =>  APIQuery(),instanceName: 'Api');
 }

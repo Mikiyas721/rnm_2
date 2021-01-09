@@ -18,7 +18,7 @@ class Episode {
   });
 
   factory Episode.fromJson(Map<String, dynamic> map) {
-    return map??Episode(
+    return map==null?null:Episode(
       id: map['id'],
       name: map['name'],
       airDate: map['air_date'],
@@ -27,7 +27,7 @@ class Episode {
       created: map['created'],
     );
   }
-  static List<Episode> fromList(List<Map<String, dynamic>> maps){
-    return maps.map((map) => Episode.fromJson(map)).toList();
+  static List<Episode> fromList(List maps){
+    return maps==null?null:maps.map((map) => Episode.fromJson(map)).toList();
   }
 }

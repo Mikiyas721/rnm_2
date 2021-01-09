@@ -18,7 +18,7 @@ class Location {
   });
 
   factory Location.fromJson(Map<String, dynamic> map) {
-    return map??Location(
+    return map==null?null:Location(
       id: map['id'],
       name: map['name'],
       type: map['type'],
@@ -27,7 +27,7 @@ class Location {
       created: map['created'],
     );
   }
-  static List<Location> fromList(List<Map<String, dynamic>> maps){
-    return maps.map((map) => Location.fromJson(map)).toList();
+  static List<Location> fromList(List maps){
+    return maps==null?null:maps.map((map) => Location.fromJson(map)).toList();
   }
 }
