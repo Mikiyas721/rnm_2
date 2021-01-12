@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../data/bloc/characterBloc.dart';
+import '../../data/bloc/provider/provider.dart';
 import '../../data/model/character.dart';
 import '../../ui/customWidgets/characterDialog.dart';
 
@@ -10,13 +12,18 @@ class CharacterTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bloc = Provider.of<CharacterBloc>(context);
     return ListTile(
       leading: CircleAvatar(
         backgroundImage: NetworkImage(character.image),
       ),
       title: Text(character.name),
       trailing: forFavourite
-          ? IconButton(icon: Icon(Icons.remove), onPressed: () {})
+          ? IconButton(
+              icon: Icon(Icons.remove),
+              onPressed: () {
+                bloc.removeFromFavourite(character.id);
+              })
           : null,
       onTap: () {
         showDialog(

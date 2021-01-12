@@ -1,8 +1,9 @@
 import 'package:get_it/get_it.dart';
-import 'package:rnm/data/model/character.dart';
-import 'package:rnm/utils/apiQuery.dart';
-import 'package:rnm/utils/databaseManager.dart';
 import 'package:rxdart/rxdart.dart';
+import '../../data/bloc/episodeBloc.dart';
+import '../../data/model/character.dart';
+import '../../utils/apiQuery.dart';
+import '../../utils/databaseManager.dart';
 import '../../utils/disposable.dart';
 
 class CharacterBloc extends Disposable {
@@ -23,12 +24,22 @@ class CharacterBloc extends Disposable {
   Stream<List> get favouriteCharactersStream =>
       _favouriteCharacters.map((event) => event);
 
-  void loadCharacters() async {
-    _character.add((await _api.getCharacters()).data['characters']['results']);
+  Future<void> loadCharacters() async {
+    List characters =
+        (await _api.getCharacters()).data['characters']['results'];
+    List<Map<String, dynamic>> saved = await loadFavouriteCharacters();
+    _character.add(characters
+        .map((map) => {
+              'data': map,
+              'isStarred': EpisodeBloc.hasThisKey(saved, map['id'])
+            })
+        .toList());
   }
 
-  void loadFavouriteCharacters() async {
-    _favouriteCharacters.add(await _database.fetchFavouriteCharacters());
+  Future<List<Map<String, dynamic>>> loadFavouriteCharacters() async {
+    final result = await _database.fetchFavouriteCharacters();
+    _favouriteCharacters.add(result);
+    return result;
   }
 
   Future<void> loadRecentCharacters() async {
@@ -39,10 +50,20 @@ class CharacterBloc extends Disposable {
     isActive
         ? await _database.addFavouriteCharacter(character)
         : await _database.deleteFavouriteCharacter(character.id);
+    await loadCharacters();
   }
 
   Future<void> addRecentCharacter(Character character) async {
-    await _database.addRecentCharacter(character);
+    List<Map<String, dynamic>> recent = await _database.fetchRecentCharacters();
+    if (!(recent[0]['id'] == character.id)) {
+      await _database.addRecentCharacter(character);
+      _database.limitRecent();
+    }
+  }
+
+  void removeFromFavourite(String id) async {
+    await _database.deleteFavouriteCharacter(id);
+    await loadCharacters();
   }
 
   @override

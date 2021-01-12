@@ -1,7 +1,7 @@
+import 'package:sqflite/sqflite.dart';
 import '../data/model/Episode.dart';
 import '../data/model/character.dart';
 import '../data/model/location.dart';
-import 'package:sqflite/sqflite.dart';
 
 class DatabaseManager {
   Database _database;
@@ -131,6 +131,11 @@ class DatabaseManager {
   Future<int> deleteFavouriteEpisode(String id) async {
     int count = await _database
         .rawDelete('DELETE FROM FavouriteEpisodes WHERE id = ?', [id]);
+    return count;
+  }
+  Future<int> limitRecent()async{
+    int count = await _database
+        .rawDelete('DELETE FROM RecentCharacters WHERE NOT EXISTS in (SELECT id FROM RecentCharacters ORDER BY id LIMIT 10)');
     return count;
   }
 }

@@ -54,7 +54,7 @@ class _LocationsPageState extends State<LocationsPage> {
                                 children: List.generate(snapshot.data.length,
                                     (int index) {
                                   Location location =
-                                      Location.fromAPI(snapshot.data[index]);
+                                      Location.fromAPI(snapshot.data[index]['data']);
                                   return ExpansionPanel(
                                     headerBuilder:
                                         (BuildContext context, bool value) {
@@ -69,7 +69,7 @@ class _LocationsPageState extends State<LocationsPage> {
                                             await bloc.onStarTap(
                                                 isActive, location);
                                           },
-                                          isActive: false,
+                                          isActive: snapshot.data[index]['isStarred'],
                                           activeIcon: Icon(
                                             Icons.star,
                                             color: Colors.yellow.shade500,

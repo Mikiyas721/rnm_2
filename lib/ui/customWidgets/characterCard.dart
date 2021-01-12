@@ -1,14 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:rnm/data/bloc/characterBloc.dart';
-import 'package:rnm/data/bloc/provider/provider.dart';
+import '../../data/bloc/characterBloc.dart';
+import '../../data/bloc/provider/provider.dart';
 import '../../data/model/character.dart';
 
 class CharacterCard extends StatelessWidget {
   final Character character;
   final bool isActive;
+  final bool isStarred;
 
-  CharacterCard({@required this.character, this.isActive});
+  CharacterCard({@required this.character, this.isActive, this.isStarred});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,7 @@ class CharacterCard extends StatelessWidget {
       padding: EdgeInsets.only(right: 15),
       child: GestureDetector(
         onTap: ()async {
-          Navigator.pushNamed(context, '/characterPage', arguments: character);
+          Navigator.pushNamed(context, '/characterPage', arguments: {'data':character,'isStarred':isStarred});
           await characterBloc.addRecentCharacter(character);
           characterBloc.loadRecentCharacters();
         },

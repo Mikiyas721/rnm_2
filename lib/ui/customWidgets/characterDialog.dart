@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rnm/ui/customWidgets/myText.dart';
+import '../../ui/customWidgets/myText.dart';
 import '../../data/model/character.dart';
 
 class CharacterDialog extends StatelessWidget {

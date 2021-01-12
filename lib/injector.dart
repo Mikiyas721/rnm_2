@@ -1,6 +1,6 @@
 import 'package:get_it/get_it.dart';
-import 'package:rnm/utils/apiQuery.dart';
-import 'package:rnm/utils/databaseManager.dart';
+import './utils/apiQuery.dart';
+import './utils/databaseManager.dart';
 import 'package:rxdart/rxdart.dart';
 
 void register() {

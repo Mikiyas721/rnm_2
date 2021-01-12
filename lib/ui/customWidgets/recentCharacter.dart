@@ -11,24 +11,22 @@ class RecentCharacter extends StatelessWidget {
     return Container(
       width: 100,
       height: 100,
-      child: Expanded(
-        child: Column(
-          children: [
-            CircleAvatar(
-              backgroundImage: NetworkImage(character.image),
-              radius: 40,
+      child: Column(
+        children: [
+          CircleAvatar(
+            backgroundImage: NetworkImage(character.image),
+            radius: 40,
+          ),
+          Padding(
+            padding: EdgeInsets.only(bottom: 5),
+            child: Text(
+              character.name,
+              overflow: TextOverflow.ellipsis,
+              softWrap: false,
+              maxLines: 1,
             ),
-            Padding(
-              padding: EdgeInsets.only(bottom: 5),
-              child: Text(
-                character.name,
-                overflow: TextOverflow.ellipsis,
-                softWrap: false,
-                maxLines: 1,
-              ),
-            )
-          ],
-        ),
+          )
+        ],
       ),
     );
   }

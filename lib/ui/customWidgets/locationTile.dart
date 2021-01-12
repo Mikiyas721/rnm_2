@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import '../../data/bloc/locationBloc.dart';
+import '../../data/bloc/provider/provider.dart';
 import '../../data/model/location.dart';
-import '../../ui/customWidgets/myText.dart';
 
 class LocationTile extends StatelessWidget {
   final Location location;
@@ -9,6 +10,7 @@ class LocationTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bloc = Provider.of<LocationBloc>(context);
     return ListTile(
       leading: Container(
         padding: EdgeInsets.all(8),
@@ -26,7 +28,9 @@ class LocationTile extends StatelessWidget {
         icon: Icon(
           Icons.remove,
         ),
-        onPressed: () {},
+        onPressed: () {
+          bloc.removeFromFavourite(location.id);
+        },
       ),
     );
   }

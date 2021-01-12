@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:rnm/data/bloc/characterBloc.dart';
-import 'package:rnm/data/bloc/provider/provider.dart';
-import 'package:rnm/ui/customWidgets/favouriteIcon.dart';
+import '../../data/bloc/characterBloc.dart';
+import '../../ui/customWidgets/favouriteIcon.dart';
 import '../../ui/customWidgets/myText.dart';
 import '../../data/model/character.dart';
 
 class CharacterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Character character = ModalRoute.of(context).settings.arguments;
+    Map<String,dynamic> data = ModalRoute.of(context).settings.arguments;
+    Character character = data['data'];
     CharacterBloc bloc = CharacterBloc();
     return Scaffold(
       body: Stack(
@@ -182,7 +182,7 @@ class CharacterPage extends StatelessWidget {
                                         await bloc.onStarTap(
                                             isActive, character);
                                       },
-                                      isActive: false,
+                                      isActive: data['isStarred'],
                                       activeIcon: Icon(
                                         Icons.favorite,
                                         size: 30,

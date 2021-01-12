@@ -1,9 +1,10 @@
 import 'package:get_it/get_it.dart';
-import 'package:rnm/data/model/location.dart';
-import 'package:rnm/utils/databaseManager.dart';
-import '../../utils/apiQuery.dart';
 import 'package:rxdart/rxdart.dart';
+import '../../data/model/location.dart';
+import '../../utils/databaseManager.dart';
+import '../../utils/apiQuery.dart';
 import '../../utils/disposable.dart';
+import 'episodeBloc.dart';
 
 class LocationBloc extends Disposable {
   BehaviorSubject<List> _locations =
@@ -18,18 +19,29 @@ class LocationBloc extends Disposable {
   Stream<List> get favouriteLocationsStream =>
       _favouriteLocations.map((event) => event);
 
-  void loadLocations() async {
-    _locations.add((await _api.getLocations()).data['locations']['results']);
+  Future<void> loadLocations() async {
+    List locations = (await _api.getLocations()).data['locations']['results'];
+    List<Map<String, dynamic>> saved = await loadFavouriteLocations();
+    _locations.add(locations
+        .map((map) =>
+            {'data': map, 'isStarred': EpisodeBloc.hasThisKey(saved, map['id'])})
+        .toList());
   }
 
-  void loadFavouriteLocations()async {
-    _favouriteLocations.add(await _database.fetchFavouriteLocations());
+  Future<List<Map<String, dynamic>>> loadFavouriteLocations() async {
+    final result = await _database.fetchFavouriteLocations();
+    _favouriteLocations.add(result);
+    return result;
   }
 
   Future<void> onStarTap(bool isActive, Location location) async {
     isActive
         ? await _database.addFavouriteLocation(location)
         : await _database.deleteFavouriteLocation(location.id);
+  }
+  void removeFromFavourite(String id)async{
+    await _database.deleteFavouriteLocation(id);
+    await loadLocations();
   }
 
   @override

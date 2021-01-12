@@ -7,16 +7,23 @@ import '../../ui/customWidgets/favouriteIcon.dart';
 class EpisodeTile extends StatelessWidget {
   final Episode episode;
   final bool forFavourite;
+  final bool isActive;
 
-  EpisodeTile({@required this.episode, @required this.forFavourite});
+  EpisodeTile(
+      {@required this.episode,
+      @required this.forFavourite,
+      this.isActive = false});
 
   @override
   Widget build(BuildContext context) {
     EpisodeBloc bloc = Provider.of<EpisodeBloc>(context);
     return ListTile(
-        onTap: episode.characters==null?null:() {
-          Navigator.pushNamed(context, '/episodePage', arguments: episode);
-        },
+        onTap: episode.characters == null
+            ? null
+            : () {
+                Navigator.pushNamed(context, '/episodePage',
+                    arguments: episode);
+              },
         contentPadding: EdgeInsets.all(0),
         leading: Container(
           padding: EdgeInsets.all(8),
@@ -31,17 +38,21 @@ class EpisodeTile extends StatelessWidget {
         title: Text(episode.episode),
         subtitle: Text(episode.name),
         trailing: forFavourite
-            ? IconButton(icon: Icon(Icons.remove), onPressed: () {})
+            ? IconButton(
+                icon: Icon(Icons.remove),
+                onPressed: () {
+                  bloc.removeFromFavourite(episode.id);
+                })
             : TwoStateIconButton(
                 inActiveIcon: Icon(
                   Icons.star_border,
                   color: Colors.grey.shade500,
                   size: 30,
                 ),
-                onTap: (bool isActive)async{
-                  await bloc.onStarTap(isActive,episode);
+                onTap: (bool isActive) async {
+                  await bloc.onStarTap(isActive, episode);
                 },
-                isActive: false,
+                isActive: isActive,
                 activeIcon: Icon(
                   Icons.star,
                   color: Colors.yellow.shade500,

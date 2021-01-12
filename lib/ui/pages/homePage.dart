@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import '../../ui/customWidgets/myPageView.dart';
 import '../../data/model/Episode.dart';
 import '../../data/model/character.dart';
 import '../../data/bloc/characterBloc.dart';
@@ -7,21 +8,8 @@ import '../../data/bloc/episodeBloc.dart';
 import '../../data/bloc/provider/provider.dart';
 import '../../ui/customWidgets/episodeTile.dart';
 import '../../ui/customWidgets/recentCharacter.dart';
-import '../../ui/customWidgets/characterCard.dart';
 
-class HomePage extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  int selectedPage;
-
-  @override
-  void initState() {
-    selectedPage = 2;
-    super.initState();
-  }
+class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
@@ -73,27 +61,7 @@ class _HomePageState extends State<HomePage> {
                             AsyncSnapshot<List> snapshot) {
                           return snapshot.data == null
                               ? Center(child: CircularProgressIndicator())
-                              : PageView.builder(
-                                  itemCount: snapshot.data.length,
-                                  controller: PageController(
-                                      viewportFraction: 0.5, initialPage: 2),
-                                  onPageChanged: (int index) {
-                                    setState(() {
-                                      selectedPage = index;
-                                    });
-                                  },
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    return Transform.scale(
-                                        scale: index == selectedPage ? 1.05 : 1,
-                                        child: CharacterCard(
-                                            isActive: index == selectedPage
-                                                ? true
-                                                : false,
-                                            character: Character.fromAPI(
-                                                snapshot.data[index])));
-                                  },
-                                );
+                              : MyPageView(data: snapshot.data);
                         }),
                   ),
                   Text(
@@ -113,17 +81,17 @@ class _HomePageState extends State<HomePage> {
                                       child: Text('No data'),
                                     )
                                   : Padding(
-                                    padding: EdgeInsets.only(top:10),
-                                    child: ListView.builder(
-                                        scrollDirection: Axis.horizontal,
-                                        itemCount: snapshot.data.length,
-                                        itemBuilder:
-                                            (BuildContext context, int index) {
-                                          return RecentCharacter(
-                                              character: Character.fromDB(
-                                                  snapshot.data[index]));
-                                        }),
-                                  );
+                                      padding: EdgeInsets.only(top: 10),
+                                      child: ListView.builder(
+                                          scrollDirection: Axis.horizontal,
+                                          itemCount: snapshot.data.length,
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
+                                            return RecentCharacter(
+                                                character: Character.fromDB(
+                                                    snapshot.data[index]));
+                                          }),
+                                    );
                         }),
                   ),
                   Text(
@@ -147,8 +115,10 @@ class _HomePageState extends State<HomePage> {
                                         (BuildContext context, int index) {
                                       return EpisodeTile(
                                         episode: Episode.fromAPI(
-                                            snapshot.data[index]),
+                                            snapshot.data[index]['data']),
                                         forFavourite: false,
+                                        isActive: snapshot.data[index]
+                                        ['isStarred'],
                                       );
                                     });
                           });
