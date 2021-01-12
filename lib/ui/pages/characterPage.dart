@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:rnm/data/bloc/characterBloc.dart';
+import 'package:rnm/data/bloc/provider/provider.dart';
+import 'package:rnm/ui/customWidgets/favouriteIcon.dart';
 import '../../ui/customWidgets/myText.dart';
 import '../../data/model/character.dart';
 
@@ -6,6 +9,7 @@ class CharacterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Character character = ModalRoute.of(context).settings.arguments;
+    CharacterBloc bloc = CharacterBloc();
     return Scaffold(
       body: Stack(
         children: [
@@ -172,16 +176,23 @@ class CharacterPage extends StatelessWidget {
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(30))),
                               child: Padding(
-                                padding: EdgeInsets.all(4),
-                                child: IconButton(
-                                  icon: Icon(
-                                    Icons.favorite,
-                                    size: 30,
-                                    color: Colors.purple,
-                                  ),
-                                  onPressed: () {},
-                                ),
-                              ),
+                                  padding: EdgeInsets.all(4),
+                                  child: TwoStateIconButton(
+                                      onTap: (bool isActive) async {
+                                        await bloc.onStarTap(
+                                            isActive, character);
+                                      },
+                                      isActive: false,
+                                      activeIcon: Icon(
+                                        Icons.favorite,
+                                        size: 30,
+                                        color: Colors.purple,
+                                      ),
+                                      inActiveIcon: Icon(
+                                        Icons.favorite_border_rounded,
+                                        size: 30,
+                                        color: Colors.grey,
+                                      ))),
                             ),
                           ),
                         ],

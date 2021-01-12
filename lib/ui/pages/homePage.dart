@@ -35,7 +35,14 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         actions: [
-          IconButton(padding: EdgeInsets.only(right: 20),
+          IconButton(
+              padding: EdgeInsets.only(right: 20),
+              icon: Icon(Icons.star),
+              onPressed: () {
+                Navigator.pushNamed(context, '/favouritePage');
+              }),
+          IconButton(
+              padding: EdgeInsets.only(right: 20),
               icon: Icon(Icons.location_on),
               onPressed: () {
                 Navigator.pushNamed(context, '/locationsPage');
@@ -46,6 +53,7 @@ class _HomePageState extends State<HomePage> {
           blocSource: () => CharacterBloc(),
           builder: (BuildContext context, CharacterBloc bloc) {
             bloc.loadCharacters();
+            bloc.loadRecentCharacters();
             return Padding(
               padding: EdgeInsets.only(left: 20, right: 20),
               child: ListView(
@@ -67,8 +75,8 @@ class _HomePageState extends State<HomePage> {
                               ? Center(child: CircularProgressIndicator())
                               : PageView.builder(
                                   itemCount: snapshot.data.length,
-                                  controller:
-                                      PageController(viewportFraction: 0.5,initialPage: 2),
+                                  controller: PageController(
+                                      viewportFraction: 0.5, initialPage: 2),
                                   onPageChanged: (int index) {
                                     setState(() {
                                       selectedPage = index;
@@ -82,7 +90,7 @@ class _HomePageState extends State<HomePage> {
                                             isActive: index == selectedPage
                                                 ? true
                                                 : false,
-                                            character: Character.fromJson(
+                                            character: Character.fromAPI(
                                                 snapshot.data[index])));
                                   },
                                 );
@@ -93,21 +101,29 @@ class _HomePageState extends State<HomePage> {
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
                   ),
                   Container(
-                    height: 150,
+                    height: 120,
                     child: StreamBuilder(
                         stream: bloc.recentCharacterStream,
                         builder: (BuildContext context,
                             AsyncSnapshot<List> snapshot) {
                           return snapshot.data == null
                               ? Center(child: CircularProgressIndicator())
-                              : ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: snapshot.data.length,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    return RecentCharacter(
-                                        character: snapshot.data[index]);
-                                  });
+                              : snapshot.data.isEmpty
+                                  ? Center(
+                                      child: Text('No data'),
+                                    )
+                                  : Padding(
+                                    padding: EdgeInsets.only(top:10),
+                                    child: ListView.builder(
+                                        scrollDirection: Axis.horizontal,
+                                        itemCount: snapshot.data.length,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          return RecentCharacter(
+                                              character: Character.fromDB(
+                                                  snapshot.data[index]));
+                                        }),
+                                  );
                         }),
                   ),
                   Text(
@@ -130,7 +146,9 @@ class _HomePageState extends State<HomePage> {
                                     itemBuilder:
                                         (BuildContext context, int index) {
                                       return EpisodeTile(
-                                        episode: Episode.fromJson(snapshot.data[index]),
+                                        episode: Episode.fromAPI(
+                                            snapshot.data[index]),
+                                        forFavourite: false,
                                       );
                                     });
                           });

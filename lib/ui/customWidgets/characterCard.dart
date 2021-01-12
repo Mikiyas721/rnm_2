@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:rnm/data/bloc/characterBloc.dart';
+import 'package:rnm/data/bloc/provider/provider.dart';
 import '../../data/model/character.dart';
 
 class CharacterCard extends StatelessWidget {
@@ -10,11 +12,14 @@ class CharacterCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    CharacterBloc characterBloc = Provider.of<CharacterBloc>(context);
     return Padding(
       padding: EdgeInsets.only(right: 15),
       child: GestureDetector(
-        onTap: () {
+        onTap: ()async {
           Navigator.pushNamed(context, '/characterPage', arguments: character);
+          await characterBloc.addRecentCharacter(character);
+          characterBloc.loadRecentCharacters();
         },
         child: isActive == null
             ? Container(

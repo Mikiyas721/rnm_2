@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:rnm/data/model/location.dart';
-import 'package:rnm/ui/customWidgets/myText.dart';
+import '../../ui/customWidgets/favouriteIcon.dart';
+import '../../data/model/location.dart';
+import '../../ui/customWidgets/myText.dart';
 import '../../data/bloc/locationBloc.dart';
 import '../../data/bloc/provider/provider.dart';
 
@@ -53,14 +54,28 @@ class _LocationsPageState extends State<LocationsPage> {
                                 children: List.generate(snapshot.data.length,
                                     (int index) {
                                   Location location =
-                                      Location.fromJson(snapshot.data[index]);
+                                      Location.fromAPI(snapshot.data[index]);
                                   return ExpansionPanel(
                                     headerBuilder:
                                         (BuildContext context, bool value) {
                                       return ListTile(
-                                        leading: IconButton(
-                                            icon: Icon(Icons.star),
-                                            onPressed: () {}),
+                                        leading: TwoStateIconButton(
+                                          inActiveIcon: Icon(
+                                            Icons.star_border,
+                                            color: Colors.grey.shade500,
+                                            size: 30,
+                                          ),
+                                          onTap: (bool isActive) async{
+                                            await bloc.onStarTap(
+                                                isActive, location);
+                                          },
+                                          isActive: false,
+                                          activeIcon: Icon(
+                                            Icons.star,
+                                            color: Colors.yellow.shade500,
+                                            size: 30,
+                                          ),
+                                        ),
                                         title: Text(location.name),
                                       );
                                     },

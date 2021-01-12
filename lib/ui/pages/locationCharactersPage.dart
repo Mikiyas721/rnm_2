@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../ui/customWidgets/characterDialog.dart';
+import '../../ui/customWidgets/characterTile.dart';
 import '../../data/model/location.dart';
 
 class LocationCharactersPage extends StatelessWidget {
@@ -13,22 +13,8 @@ class LocationCharactersPage extends StatelessWidget {
       body: ListView.builder(
           itemCount: location.residents.length,
           itemBuilder: (BuildContext context, int index) {
-            return ListTile(
-              leading: CircleAvatar(
-                backgroundImage: NetworkImage(location.residents[index].image),
-              ),
-              title: Text(location.residents[index].name),
-              onTap: () {
-                showDialog(
-                    barrierColor: Colors.black54,
-                    barrierDismissible: false,
-                    context: context,
-                    builder: (BuildContext context) {
-                      return CharacterDialog(
-                        character: location.residents[index],
-                      );
-                    });
-              },
+            return CharacterTile(
+              character: location.residents[index], forFavourite: false,
             );
           }),
     );

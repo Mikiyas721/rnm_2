@@ -17,7 +17,7 @@ class Episode {
     this.created,
   });
 
-  factory Episode.fromJson(Map<String, dynamic> map) {
+  factory Episode.fromAPI(Map<String, dynamic> map) {
     return map==null?null:Episode(
       id: map['id'],
       name: map['name'],
@@ -27,7 +27,17 @@ class Episode {
       created: map['created'],
     );
   }
+  factory Episode.fromDB(Map<String, dynamic> map) {
+    return map==null?null:Episode(
+      id: map['id'],
+      name: map['name'],
+      airDate: map['air_date'],
+      episode: map['episode'],
+      characters: null,
+      created: map['created'],
+    );
+  }
   static List<Episode> fromList(List maps){
-    return maps==null?null:maps.map((map) => Episode.fromJson(map)).toList();
+    return maps==null?null:maps.map((map) => Episode.fromAPI(map)).toList();
   }
 }

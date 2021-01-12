@@ -8,13 +8,28 @@ class RecentCharacter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        CircleAvatar(
-          backgroundImage: NetworkImage(character.image),
+    return Container(
+      width: 100,
+      height: 100,
+      child: Expanded(
+        child: Column(
+          children: [
+            CircleAvatar(
+              backgroundImage: NetworkImage(character.image),
+              radius: 40,
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: 5),
+              child: Text(
+                character.name,
+                overflow: TextOverflow.ellipsis,
+                softWrap: false,
+                maxLines: 1,
+              ),
+            )
+          ],
         ),
-        Text(character.name)
-      ],
+      ),
     );
   }
 }
