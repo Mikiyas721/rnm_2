@@ -20,6 +20,10 @@ class HomePage extends StatelessWidget {
           padding: EdgeInsets.only(left: 5),
           child: CupertinoTextField(
             placeholder: 'Search',
+            readOnly: true,
+            onTap: (){
+              Navigator.pushNamed(context, '/searchPage');
+            },
           ),
         ),
         actions: [

@@ -10,8 +10,6 @@ class CharacterDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      elevation: 0,
-      backgroundColor: Colors.black.withOpacity(0),
       title: Image.network(
         character.image,
         width: MediaQuery.of(context).size.width * 0.9,

@@ -119,19 +119,18 @@ class FavouritePage extends StatelessWidget {
                                 ? Center(
                                     child: Text('No Favourite Episode'),
                                   )
-                                : Padding(
-                                  padding: EdgeInsets.only(left:20,right: 20),
-                                  child: ListView.builder(
-                                      itemCount: snapshot.data.length,
-                                      itemBuilder:
-                                          (BuildContext context, int index) {
-                                        return EpisodeTile(
-                                          episode: Episode.fromDB(
-                                              snapshot.data[index]),
-                                          forFavourite: true,
-                                        );
-                                      }),
-                                );
+                                : ListView.builder(
+                                    itemCount: snapshot.data.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return EpisodeTile(
+                                        episode: Episode.fromDB(
+                                            snapshot.data[index]),
+                                        forFavourite: true,
+                                        padding: EdgeInsets.only(
+                                            left: 20, right: 20),
+                                      );
+                                    });
                       });
                 }),
             BlocProvider(
@@ -157,6 +156,7 @@ class FavouritePage extends StatelessWidget {
                                       return LocationTile(
                                         location: Location.fromDB(
                                             snapshot.data[index]),
+                                        forFavourite: true,
                                       );
                                     });
                       });

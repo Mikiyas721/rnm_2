@@ -13,6 +13,10 @@ void register() {
   instance.registerLazySingleton(() => BehaviorSubject<List>(),instanceName: 'Locations');
   instance.registerLazySingleton(() => BehaviorSubject<List>(),instanceName: 'FavouriteLocations');
 
+  instance.registerLazySingleton(() => BehaviorSubject<String>(),instanceName: 'SearchElement');
+  instance.registerLazySingleton(() => BehaviorSubject<String>(),instanceName: 'SearchProperty');
+  instance.registerLazySingleton(() => BehaviorSubject<List>(),instanceName: 'SearchData');
+
   instance.registerLazySingleton(() =>  APIQuery(),instanceName: 'Api');
   instance.registerSingleton<DatabaseManager>(DatabaseManager(),instanceName: 'Database');
 }

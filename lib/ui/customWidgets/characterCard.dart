@@ -17,10 +17,13 @@ class CharacterCard extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(right: 15),
       child: GestureDetector(
-        onTap: ()async {
-          Navigator.pushNamed(context, '/characterPage', arguments: {'data':character,'isStarred':isStarred});
-          await characterBloc.addRecentCharacter(character);
-          characterBloc.loadRecentCharacters();
+        onTap: () async {
+          Navigator.pushNamed(context, '/characterPage',
+              arguments: {'data': character, 'isStarred': isStarred});
+          if (isActive!=null) {
+            await characterBloc.addRecentCharacter(character);
+            characterBloc.loadRecentCharacters();
+          }
         },
         child: isActive == null
             ? Container(
@@ -28,15 +31,14 @@ class CharacterCard extends StatelessWidget {
                 margin: EdgeInsets.only(bottom: 10),
                 decoration: BoxDecoration(
                     image: DecorationImage(
-                        image: NetworkImage(character.image),
-                        fit: BoxFit.fill),
+                        image: NetworkImage(character.image), fit: BoxFit.fill),
                     borderRadius: BorderRadius.all(Radius.circular(20))),
               )
             : Column(
                 children: [
                   Container(
                     height: 200,
-                    margin: EdgeInsets.only(bottom: 10,right: 5,top: 20),
+                    margin: EdgeInsets.only(bottom: 10, right: 5, top: 20),
                     decoration: BoxDecoration(
                         image: DecorationImage(
                             image: NetworkImage(character.image),
@@ -45,8 +47,10 @@ class CharacterCard extends StatelessWidget {
                   ),
                   Text(
                     character.name,
-                    style:
-                        TextStyle(color: isActive ? Colors.black : Colors.grey),
+                    style: TextStyle(
+                        color: isActive
+                            ? Theme.of(context).textTheme.bodyText1.color
+                            : Colors.grey),
                   )
                 ],
               ),

@@ -52,7 +52,7 @@ class CharacterPage extends StatelessWidget {
                               margin: EdgeInsets.only(top: 28),
                               width: MediaQuery.of(context).size.width,
                               decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  color: Theme.of(context).scaffoldBackgroundColor,
                                   borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(40),
                                       topRight: Radius.circular(40))),
@@ -178,11 +178,11 @@ class CharacterPage extends StatelessWidget {
                               child: Padding(
                                   padding: EdgeInsets.all(4),
                                   child: TwoStateIconButton(
-                                      onTap: (bool isActive) async {
+                                      onTap: data['isStarred']==null?null:(bool isActive) async {
                                         await bloc.onStarTap(
                                             isActive, character);
                                       },
-                                      isActive: data['isStarred'],
+                                      isActive: data['isStarred']??false,
                                       activeIcon: Icon(
                                         Icons.favorite,
                                         size: 30,

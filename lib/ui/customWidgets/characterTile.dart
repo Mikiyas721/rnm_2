@@ -27,7 +27,6 @@ class CharacterTile extends StatelessWidget {
           : null,
       onTap: () {
         showDialog(
-            barrierColor: Colors.black87,
             barrierDismissible: false,
             context: context,
             builder: (BuildContext context) {

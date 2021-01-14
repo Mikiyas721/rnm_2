@@ -28,7 +28,7 @@ class _TwoStateIconButtonState extends State<TwoStateIconButton> {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      onPressed: () {
+      onPressed: widget.onTap==null?null:() {
         setState(() {
           isActive = !isActive;
           widget.onTap(isActive);

@@ -43,24 +43,27 @@ class Character {
             episode: Episode.fromList(map['episode']),
             created: map['created']);
   }
+
   factory Character.fromDB(Map<String, dynamic> map) {
     return map == null
         ? null
         : Character(
-        id: map['id'],
-        name: map['name'],
-        status: map['status'],
-        species: map['species'],
-        type: map['type'],
-        gender: map['gender'],
-        origin: Location(name: map['location']),
-        location: Location(name: map['location']),
-        image: map['image'],
-        episode: null,
-        created: map['created']);
+            id: map['id'],
+            name: map['name'],
+            status: map['status'],
+            species: map['species'],
+            type: map['type'],
+            gender: map['gender'],
+            origin: Location(name: map['location']),
+            location: Location(name: map['location']),
+            image: map['image'],
+            episode: null,
+            created: map['created']);
   }
 
   static List<Character> fromList(List maps) {
-    return maps==null?null:maps.map((map) => Character.fromAPI(map)).toList();
+    return maps == null
+        ? null
+        : maps.map((map) => Character.fromAPI(map)).toList();
   }
 }

@@ -8,11 +8,13 @@ class EpisodeTile extends StatelessWidget {
   final Episode episode;
   final bool forFavourite;
   final bool isActive;
+  final bool forSearch;
+  final EdgeInsetsGeometry padding;
 
   EpisodeTile(
       {@required this.episode,
       @required this.forFavourite,
-      this.isActive = false});
+      this.isActive = false,this.forSearch = false, this.padding = const EdgeInsets.all(0)});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +26,7 @@ class EpisodeTile extends StatelessWidget {
                 Navigator.pushNamed(context, '/episodePage',
                     arguments: episode);
               },
-        contentPadding: EdgeInsets.all(0),
+        contentPadding: padding,
         leading: Container(
           padding: EdgeInsets.all(8),
           decoration: BoxDecoration(
@@ -37,7 +39,7 @@ class EpisodeTile extends StatelessWidget {
         ),
         title: Text(episode.episode),
         subtitle: Text(episode.name),
-        trailing: forFavourite
+        trailing: forSearch?null:forFavourite
             ? IconButton(
                 icon: Icon(Icons.remove),
                 onPressed: () {

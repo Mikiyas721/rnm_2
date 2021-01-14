@@ -5,8 +5,9 @@ import '../../data/model/location.dart';
 
 class LocationTile extends StatelessWidget {
   final Location location;
+  final bool forFavourite;
 
-  LocationTile({@required this.location});
+  LocationTile({@required this.location,@required this.forFavourite});
 
   @override
   Widget build(BuildContext context) {
@@ -24,14 +25,14 @@ class LocationTile extends StatelessWidget {
       ),
       title: Text(location.name),
       subtitle: Text(location.dimension),
-      trailing: IconButton(
+      trailing: forFavourite?IconButton(
         icon: Icon(
           Icons.remove,
         ),
         onPressed: () {
           bloc.removeFromFavourite(location.id);
         },
-      ),
+      ):null,
     );
   }
 }

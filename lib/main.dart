@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:rnm/ui/pages/searchPage.dart';
 import './ui/pages/favouritePage.dart';
 import './utils/databaseManager.dart';
 import './ui/pages/locationCharactersPage.dart';
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
       title: 'Rick and Morty',
       initialRoute: '/',
       routes: routes,
+      theme: ThemeData.dark(),
     );
   }
 }
@@ -35,7 +37,8 @@ final routes = {
   '/characterPage': (BuildContext context) => CharacterPage(),
   '/characterEpisodesPage': (BuildContext context) => CharacterEpisodesPage(),
   '/episodePage': (BuildContext context) => EpisodePage(),
+  '/favouritePage': (BuildContext context) => FavouritePage(),
   '/locationsPage': (BuildContext context) => LocationsPage(),
   '/locationCharactersPage': (BuildContext context) => LocationCharactersPage(),
-  '/favouritePage': (BuildContext context) => FavouritePage(),
+  '/searchPage': (BuildContext context) => SearchPage(),
 };
