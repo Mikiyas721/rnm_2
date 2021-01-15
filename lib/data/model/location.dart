@@ -18,26 +18,33 @@ class Location {
   });
 
   factory Location.fromAPI(Map<String, dynamic> map) {
-    return map==null?null:Location(
-      id: map['id'],
-      name: map['name'],
-      type: map['type'],
-      dimension: map['dimension'],
-      residents: Character.fromList(map['residents']),
-      created: map['created'],
-    );
+    return map == null
+        ? null
+        : Location(
+            id: map['id'],
+            name: map['name'],
+            type: map['type'],
+            dimension: map['dimension'],
+            residents: Character.fromList(map['residents']),
+            created: map['created']);
   }
+
   factory Location.fromDB(Map<String, dynamic> map) {
-    return map==null?null:Location(
-      id: map['id'],
-      name: map['name'],
-      type: map['type'],
-      dimension: map['dimension'],
-      residents: null,
-      created: map['created'],
-    );
+    return map == null
+        ? null
+        : Location(
+            id: map['id'],
+            name: map['name'],
+            type: map['type'],
+            dimension: map['dimension'],
+            residents: null,
+            created: map['created'],
+          );
   }
-  static List<Location> fromList(List maps){
-    return maps==null?null:maps.map((map) => Location.fromAPI(map)).toList();
+
+  static List<Location> fromList(List maps) {
+    return maps == null
+        ? null
+        : maps.map((map) => Location.fromAPI(map)).toList();
   }
 }

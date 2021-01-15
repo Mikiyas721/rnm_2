@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../../ui/customWidgets/characterCard.dart';
 import '../../ui/customWidgets/myText.dart';
 import '../../data/model/Episode.dart';
@@ -46,7 +47,9 @@ class EpisodePage extends StatelessWidget {
                         padding: EdgeInsets.all(0)),
                     MyText(
                         label: 'Created',
-                        value: episode.created,
+                        value: DateFormat('dd-mm-yyyy')
+                            .format(DateTime.parse(
+                            episode.created)),
                         padding: EdgeInsets.all(0)),
                   ],
                 ),

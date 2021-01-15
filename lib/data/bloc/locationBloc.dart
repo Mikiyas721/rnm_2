@@ -1,3 +1,4 @@
+import 'package:connectivity/connectivity.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rxdart/rxdart.dart';
 import '../../data/model/location.dart';
@@ -20,12 +21,19 @@ class LocationBloc extends Disposable {
       _favouriteLocations.map((event) => event);
 
   Future<void> loadLocations() async {
-    List locations = (await _api.getLocations()).data['locations']['results'];
-    List<Map<String, dynamic>> saved = await loadFavouriteLocations();
-    _locations.add(locations
-        .map((map) =>
-            {'data': map, 'isStarred': EpisodeBloc.hasThisKey(saved, map['id'])})
-        .toList());
+    ConnectivityResult result = await Connectivity().checkConnectivity();
+    if (result == ConnectivityResult.none) {
+      _locations.add([null]);
+    } else {
+      List locations = (await _api.getLocations()).data['locations']['results'];
+      List<Map<String, dynamic>> saved = await loadFavouriteLocations();
+      _locations.add(locations
+          .map((map) => {
+                'data': map,
+                'isStarred': EpisodeBloc.hasThisKey(saved, map['id'])
+              })
+          .toList());
+    }
   }
 
   Future<List<Map<String, dynamic>>> loadFavouriteLocations() async {
@@ -39,7 +47,8 @@ class LocationBloc extends Disposable {
         ? await _database.addFavouriteLocation(location)
         : await _database.deleteFavouriteLocation(location.id);
   }
-  void removeFromFavourite(String id)async{
+
+  void removeFromFavourite(String id) async {
     await _database.deleteFavouriteLocation(id);
     await loadLocations();
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../../ui/customWidgets/myText.dart';
 import '../../data/model/character.dart';
 
@@ -23,7 +24,9 @@ class CharacterDialog extends StatelessWidget {
           MyText(label: 'Type', value: '${character.type}',padding: EdgeInsets.all(0),textColor: Colors.white,),
           MyText(label: 'Species', value: '${character.species}',padding: EdgeInsets.all(0),textColor: Colors.white,),
           MyText(label: 'Status', value: '${character.status}',padding: EdgeInsets.all(0),textColor: Colors.white,),
-          MyText(label: 'Created', value: '${character.created}',padding: EdgeInsets.all(0),textColor: Colors.white,),
+          MyText(label: 'Created', value: '${DateFormat('dd-mm-yyyy')
+              .format(DateTime.parse(
+              character.created))}',padding: EdgeInsets.all(0),textColor: Colors.white,),
 
         ],
       ),

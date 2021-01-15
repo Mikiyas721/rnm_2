@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../../data/bloc/characterBloc.dart';
 import '../../ui/customWidgets/favouriteIcon.dart';
 import '../../ui/customWidgets/myText.dart';
@@ -7,7 +8,7 @@ import '../../data/model/character.dart';
 class CharacterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Map<String,dynamic> data = ModalRoute.of(context).settings.arguments;
+    Map<String, dynamic> data = ModalRoute.of(context).settings.arguments;
     Character character = data['data'];
     CharacterBloc bloc = CharacterBloc();
     return Scaffold(
@@ -52,7 +53,8 @@ class CharacterPage extends StatelessWidget {
                               margin: EdgeInsets.only(top: 28),
                               width: MediaQuery.of(context).size.width,
                               decoration: BoxDecoration(
-                                  color: Theme.of(context).scaffoldBackgroundColor,
+                                  color:
+                                      Theme.of(context).scaffoldBackgroundColor,
                                   borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(40),
                                       topRight: Radius.circular(40))),
@@ -163,7 +165,9 @@ class CharacterPage extends StatelessWidget {
                                           value: character.status),
                                       MyText(
                                           label: 'Created',
-                                          value: character.created),
+                                          value: DateFormat('dd-mm-yyyy')
+                                              .format(DateTime.parse(
+                                                  character.created))),
                                     ]),
                               ),
                             ),
@@ -178,11 +182,13 @@ class CharacterPage extends StatelessWidget {
                               child: Padding(
                                   padding: EdgeInsets.all(4),
                                   child: TwoStateIconButton(
-                                      onTap: data['isStarred']==null?null:(bool isActive) async {
-                                        await bloc.onStarTap(
-                                            isActive, character);
-                                      },
-                                      isActive: data['isStarred']??false,
+                                      onTap: data['isStarred'] == null
+                                          ? null
+                                          : (bool isActive) async {
+                                              await bloc.onStarTap(
+                                                  isActive, character);
+                                            },
+                                      isActive: data['isStarred'] ?? false,
                                       activeIcon: Icon(
                                         Icons.favorite,
                                         size: 30,

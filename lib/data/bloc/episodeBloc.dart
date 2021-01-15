@@ -1,3 +1,4 @@
+import 'package:connectivity/connectivity.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rxdart/rxdart.dart';
 import '../../data/model/Episode.dart';
@@ -18,14 +19,20 @@ class EpisodeBloc extends Disposable {
       _favouriteEpisodes.map((event) => event);
 
   Future<void> loadEpisodes() async {
-    List episodes = (await _api.getEpisodes()).data['episodes']['results'];
-    List<Map<String, dynamic>> saved = await loadFavouriteEpisodes();
-    _episodes.add(episodes
-        .map((map) => {
-              'data': map,
-              'isStarred': EpisodeBloc.hasThisKey(saved, map['id'])
-            })
-        .toList());
+    _episodes.add(null);
+    ConnectivityResult result = await Connectivity().checkConnectivity();
+    if (result == ConnectivityResult.none) {
+      _episodes.add([null]);
+    } else {
+      List episodes = (await _api.getEpisodes()).data['episodes']['results'];
+      List<Map<String, dynamic>> saved = await loadFavouriteEpisodes();
+      _episodes.add(episodes
+          .map((map) => {
+                'data': map,
+                'isStarred': EpisodeBloc.hasThisKey(saved, map['id'])
+              })
+          .toList());
+    }
   }
 
   Future<List<Map<String, dynamic>>> loadFavouriteEpisodes() async {

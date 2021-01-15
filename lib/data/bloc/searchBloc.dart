@@ -23,8 +23,8 @@ class SearchBloc extends Disposable {
   String get currentSearchProperty => _searchProperty.value;
 
   void setDefaults() {
-    _searchElement.add('People');
-    _searchProperty.add('name');
+    if (currentSearchElement == null) _searchElement.add('People');
+    if (currentSearchProperty == null) _searchProperty.add('name');
   }
 
   void onSearchType(String key) {

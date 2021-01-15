@@ -1,3 +1,4 @@
+import 'package:connectivity/connectivity.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rxdart/rxdart.dart';
 import '../../data/bloc/episodeBloc.dart';
@@ -25,15 +26,21 @@ class CharacterBloc extends Disposable {
       _favouriteCharacters.map((event) => event);
 
   Future<void> loadCharacters() async {
-    List characters =
-        (await _api.getCharacters()).data['characters']['results'];
-    List<Map<String, dynamic>> saved = await loadFavouriteCharacters();
-    _character.add(characters
-        .map((map) => {
-              'data': map,
-              'isStarred': EpisodeBloc.hasThisKey(saved, map['id'])
-            })
-        .toList());
+    _character.add(null);
+    ConnectivityResult result = await Connectivity().checkConnectivity();
+    if (result == ConnectivityResult.none) {
+      _character.add([null]);
+    } else {
+      List characters =
+          (await _api.getCharacters()).data['characters']['results'];
+      List<Map<String, dynamic>> saved = await loadFavouriteCharacters();
+      _character.add(characters
+          .map((map) => {
+                'data': map,
+                'isStarred': EpisodeBloc.hasThisKey(saved, map['id'])
+              })
+          .toList());
+    }
   }
 
   Future<List<Map<String, dynamic>>> loadFavouriteCharacters() async {
@@ -57,7 +64,6 @@ class CharacterBloc extends Disposable {
     List<Map<String, dynamic>> recent = await _database.fetchRecentCharacters();
     if (!(recent[0]['id'] == character.id)) {
       await _database.addRecentCharacter(character);
-      _database.limitRecent();
     }
   }
 

@@ -10,7 +10,6 @@ import '../../ui/customWidgets/episodeTile.dart';
 import '../../ui/customWidgets/recentCharacter.dart';
 
 class HomePage extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +20,7 @@ class HomePage extends StatelessWidget {
           child: CupertinoTextField(
             placeholder: 'Search',
             readOnly: true,
-            onTap: (){
+            onTap: () {
               Navigator.pushNamed(context, '/searchPage');
             },
           ),
@@ -65,7 +64,17 @@ class HomePage extends StatelessWidget {
                             AsyncSnapshot<List> snapshot) {
                           return snapshot.data == null
                               ? Center(child: CircularProgressIndicator())
-                              : MyPageView(data: snapshot.data);
+                              : snapshot.data.isNotEmpty &&
+                                      snapshot.data[0] == null
+                                  ? Center(
+                                      child: IconButton(
+                                        icon: Icon(Icons.refresh,size: 40),
+                                        onPressed: () {
+                                          bloc.loadCharacters();
+                                        },
+                                      ),
+                                    )
+                                  : MyPageView(data: snapshot.data);
                         }),
                   ),
                   Text(
@@ -111,20 +120,30 @@ class HomePage extends StatelessWidget {
                           builder: (context, snapshot) {
                             return snapshot.data == null
                                 ? Center(child: CircularProgressIndicator())
-                                : ListView.builder(
-                                    itemCount: snapshot.data.length,
-                                    physics: NeverScrollableScrollPhysics(),
-                                    shrinkWrap: true,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      return EpisodeTile(
-                                        episode: Episode.fromAPI(
-                                            snapshot.data[index]['data']),
-                                        forFavourite: false,
-                                        isActive: snapshot.data[index]
-                                        ['isStarred'],
-                                      );
-                                    });
+                                : snapshot.data.isNotEmpty &&
+                                        snapshot.data[0] == null
+                                    ? Center(
+                                        child: IconButton(
+                                          icon: Icon(Icons.refresh,size: 40),
+                                          onPressed: () {
+                                            bloc.loadEpisodes();
+                                          },
+                                        ),
+                                      )
+                                    : ListView.builder(
+                                        itemCount: snapshot.data.length,
+                                        physics: NeverScrollableScrollPhysics(),
+                                        shrinkWrap: true,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          return EpisodeTile(
+                                            episode: Episode.fromAPI(
+                                                snapshot.data[index]['data']),
+                                            forFavourite: false,
+                                            isActive: snapshot.data[index]
+                                                ['isStarred'],
+                                          );
+                                        });
                           });
                     },
                   )
