@@ -8,14 +8,19 @@ import '../../utils/disposable.dart';
 import 'episodeBloc.dart';
 
 class LocationBloc extends Disposable {
-  BehaviorSubject<List> _locations =
+  BehaviorSubject<Map> _locations =
       GetIt.instance.get(instanceName: 'Locations');
   BehaviorSubject<List> _favouriteLocations =
       GetIt.instance.get(instanceName: 'FavouriteLocations');
+
   APIQuery _api = GetIt.instance.get(instanceName: 'Api');
   DatabaseManager _database = GetIt.instance.get(instanceName: 'Database');
 
-  Stream<List> get locationsStream => _locations.map((event) => event);
+  Stream<Map<String, dynamic>> get locationsStream => _locations.map((event) => event);
+
+  int get enabledIndex => _locations.value['enabledIndex'];
+
+  List get locations => _locations.value['list'];
 
   Stream<List> get favouriteLocationsStream =>
       _favouriteLocations.map((event) => event);
@@ -23,17 +28,30 @@ class LocationBloc extends Disposable {
   Future<void> loadLocations() async {
     ConnectivityResult result = await Connectivity().checkConnectivity();
     if (result == ConnectivityResult.none) {
-      _locations.add([null]);
+      _locations.add({
+        'list': [null],
+        'enabledIndex': -1
+      });
     } else {
       List locations = (await _api.getLocations()).data['locations']['results'];
       List<Map<String, dynamic>> saved = await loadFavouriteLocations();
-      _locations.add(locations
-          .map((map) => {
-                'data': map,
-                'isStarred': EpisodeBloc.hasThisKey(saved, map['id'])
-              })
-          .toList());
+      _locations.add(Map<String, dynamic>.from({
+        'list': locations
+            .map((map) => {
+                  'data': map,
+                  'isStarred': EpisodeBloc.hasThisKey(saved, map['id'])
+                })
+            .toList(),
+        'enabledIndex': _locations.value==null?-1:enabledIndex
+      }));
     }
+  }
+
+  void updateEnabledIndex(int enabledIndex){
+    _locations.add(Map<String, dynamic>.from({
+      'list': locations,
+      'enabledIndex': enabledIndex
+    }));
   }
 
   Future<List<Map<String, dynamic>>> loadFavouriteLocations() async {

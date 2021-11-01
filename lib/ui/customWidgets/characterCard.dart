@@ -20,10 +20,10 @@ class CharacterCard extends StatelessWidget {
         onTap: () async {
           Navigator.pushNamed(context, '/characterPage',
               arguments: {'data': character, 'isStarred': isStarred});
-          if (isActive!=null) {
-            await characterBloc.addRecentCharacter(character);
-            characterBloc.loadRecentCharacters();
-          }
+
+          await characterBloc?.addRecentCharacter(character);
+          characterBloc?.loadRecentCharacters();
+
         },
         child: isActive == null
             ? Container(

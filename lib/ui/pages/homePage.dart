@@ -42,9 +42,11 @@ class HomePage extends StatelessWidget {
       ),
       body: BlocProvider(
           blocSource: () => CharacterBloc(),
-          builder: (BuildContext context, CharacterBloc bloc) {
+          onInit: (CharacterBloc bloc) {
             bloc.loadCharacters();
             bloc.loadRecentCharacters();
+          },
+          builder: (BuildContext context, CharacterBloc bloc) {
             return Padding(
               padding: EdgeInsets.only(left: 20, right: 20),
               child: ListView(
@@ -68,7 +70,7 @@ class HomePage extends StatelessWidget {
                                       snapshot.data[0] == null
                                   ? Center(
                                       child: IconButton(
-                                        icon: Icon(Icons.refresh,size: 40),
+                                        icon: Icon(Icons.refresh, size: 40),
                                         onPressed: () {
                                           bloc.loadCharacters();
                                         },
@@ -91,7 +93,17 @@ class HomePage extends StatelessWidget {
                               ? Center(child: CircularProgressIndicator())
                               : snapshot.data.isEmpty
                                   ? Center(
-                                      child: Text('No data'),
+                                      child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Text('No data'),
+                                            IconButton(
+                                              icon: Icon(Icons.refresh, size: 40),
+                                              onPressed:
+                                                  bloc.loadRecentCharacters,
+                                            )
+                                          ]),
                                     )
                                   : Padding(
                                       padding: EdgeInsets.only(top: 10),
@@ -113,8 +125,10 @@ class HomePage extends StatelessWidget {
                   ),
                   BlocProvider(
                     blocSource: () => EpisodeBloc(),
-                    builder: (BuildContext context, EpisodeBloc bloc) {
+                    onInit: (EpisodeBloc bloc) {
                       bloc.loadEpisodes();
+                    },
+                    builder: (BuildContext context, EpisodeBloc bloc) {
                       return StreamBuilder(
                           stream: bloc.episodesStream,
                           builder: (context, snapshot) {
@@ -124,7 +138,7 @@ class HomePage extends StatelessWidget {
                                         snapshot.data[0] == null
                                     ? Center(
                                         child: IconButton(
-                                          icon: Icon(Icons.refresh,size: 40),
+                                          icon: Icon(Icons.refresh, size: 40),
                                           onPressed: () {
                                             bloc.loadEpisodes();
                                           },

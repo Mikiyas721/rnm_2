@@ -77,8 +77,10 @@ class FavouritePage extends StatelessWidget {
           body: TabBarView(children: [
             BlocProvider(
                 blocSource: () => CharacterBloc(),
-                builder: (BuildContext context, CharacterBloc bloc) {
+                onInit: (CharacterBloc bloc){
                   bloc.loadFavouriteCharacters();
+                },
+                builder: (BuildContext context, CharacterBloc bloc) {
                   return StreamBuilder(
                       stream: bloc.favouriteCharactersStream,
                       builder:
@@ -105,8 +107,10 @@ class FavouritePage extends StatelessWidget {
                 }),
             BlocProvider(
                 blocSource: () => EpisodeBloc(),
-                builder: (BuildContext context, EpisodeBloc bloc) {
+                onInit: (EpisodeBloc bloc){
                   bloc.loadFavouriteEpisodes();
+                },
+                builder: (BuildContext context, EpisodeBloc bloc) {
                   return StreamBuilder(
                       stream: bloc.favouriteEpisodesStream,
                       builder:
@@ -135,8 +139,10 @@ class FavouritePage extends StatelessWidget {
                 }),
             BlocProvider(
                 blocSource: () => LocationBloc(),
-                builder: (BuildContext context, LocationBloc bloc) {
+                onInit: (LocationBloc bloc){
                   bloc.loadFavouriteLocations();
+                },
+                builder: (BuildContext context, LocationBloc bloc) {
                   return StreamBuilder(
                       stream: bloc.favouriteLocationsStream,
                       builder:

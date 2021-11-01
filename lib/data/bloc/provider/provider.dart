@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rnm/utils/disposable.dart';
 
 class Provider<T> extends InheritedWidget {
   final T bloc;
@@ -13,14 +14,42 @@ class Provider<T> extends InheritedWidget {
   }
 }
 
-class BlocProvider<T> extends StatelessWidget {
+class BlocProvider<T extends Disposable> extends StatefulWidget {
   final T Function() blocSource;
+  final T Function(T) onInit;
+  final T Function(T) onDispose;
   final Function(BuildContext context, T bloc) builder;
 
-  BlocProvider({@required this.builder, @required this.blocSource});
+  BlocProvider({
+    @required this.blocSource,
+    @required this.builder,
+    this.onInit,
+    this.onDispose,
+  });
+
+  @override
+  State<StatefulWidget> createState() => _BlocProviderState<T>();
+}
+
+class _BlocProviderState<T extends Disposable> extends State<BlocProvider<T>> {
+  T bloc;
+
+  @override
+  void initState() {
+    bloc = widget.blocSource();
+    widget.onInit?.call(bloc);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Provider(child: builder(context, blocSource()), bloc: blocSource());
+    return Provider<T>(bloc: bloc, child: widget.builder(context, bloc));
+  }
+
+  @override
+  void dispose() {
+    //bloc.dispose();
+    widget.onDispose?.call(bloc);
+    super.dispose();
   }
 }

@@ -15,7 +15,7 @@ class EpisodeCard extends StatelessWidget {
       padding: EdgeInsets.all(15),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(20)),
-          border: Border.all(color: Colors.black38, width: 1)),
+          border: Border.all(color: Colors.grey, width: 0.3)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

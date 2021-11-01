@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:connectivity/connectivity.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rxdart/rxdart.dart';
@@ -50,7 +52,9 @@ class CharacterBloc extends Disposable {
   }
 
   Future<void> loadRecentCharacters() async {
-    _recentCharacters.add(await _database.fetchRecentCharacters());
+    _recentCharacters.add(null);
+    List<Map<String, dynamic>> result = await _database.fetchRecentCharacters();
+    Timer(Duration(seconds: 1), () => {_recentCharacters.add(result)});
   }
 
   Future<void> onStarTap(bool isActive, Character character) async {
@@ -62,7 +66,9 @@ class CharacterBloc extends Disposable {
 
   Future<void> addRecentCharacter(Character character) async {
     List<Map<String, dynamic>> recent = await _database.fetchRecentCharacters();
-    if (!(recent[0]['id'] == character.id)) {
+    if (recent.isNotEmpty && !(recent[0]['id'] == character.id)) {
+      await _database.addRecentCharacter(character);
+    }else if(recent.isEmpty){
       await _database.addRecentCharacter(character);
     }
   }

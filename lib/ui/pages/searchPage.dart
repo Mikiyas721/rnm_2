@@ -12,8 +12,11 @@ class SearchPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        builder: (BuildContext context, SearchBloc bloc) {
+        blocSource: () => SearchBloc(),
+        onInit: (SearchBloc bloc) {
           bloc.setDefaults();
+        },
+        builder: (BuildContext context, SearchBloc bloc) {
           return Scaffold(
             appBar: AppBar(
               title: TextField(
@@ -62,8 +65,7 @@ class SearchPage extends StatelessWidget {
                           : getBody(bloc.currentSearchElement, snapshot.data);
                 }),
           );
-        },
-        blocSource: () => SearchBloc());
+        });
   }
 
   Widget getBody(String currentSearchElement, List data) {
@@ -82,7 +84,7 @@ class SearchPage extends StatelessWidget {
               episode: Episode.fromAPI(data[index]),
               forFavourite: false,
               forSearch: true,
-              padding: EdgeInsets.only(left:20,right: 20),
+              padding: EdgeInsets.only(left: 20, right: 20),
             );
           });
     else

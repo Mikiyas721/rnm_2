@@ -6,20 +6,7 @@ import '../../ui/customWidgets/myText.dart';
 import '../../data/bloc/locationBloc.dart';
 import '../../data/bloc/provider/provider.dart';
 
-class LocationsPage extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => _LocationsPageState();
-}
-
-class _LocationsPageState extends State<LocationsPage> {
-  int expandedTileIndex;
-
-  @override
-  void initState() {
-    expandedTileIndex = -1;
-    super.initState();
-  }
-
+class LocationsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,17 +15,20 @@ class _LocationsPageState extends State<LocationsPage> {
         ),
         body: BlocProvider(
             blocSource: () => LocationBloc(),
-            builder: (BuildContext context, LocationBloc bloc) {
+            onInit: (LocationBloc bloc) {
               bloc.loadLocations();
+            },
+            builder: (BuildContext context, LocationBloc bloc) {
               return StreamBuilder(
                   stream: bloc.locationsStream,
-                  builder:
-                      (BuildContext context, AsyncSnapshot<List> snapshot) {
+                  builder: (BuildContext context,
+                      AsyncSnapshot<Map<String, dynamic>> snapshot) {
                     return snapshot.data == null
                         ? Center(
                             child: CircularProgressIndicator(),
                           )
-                        : snapshot.data.isNotEmpty && snapshot.data[0] == null
+                        : snapshot.data['list'].isNotEmpty &&
+                                snapshot.data['list'][0] == null
                             ? Center(
                                 child: IconButton(
                                 icon: Icon(Icons.refresh),
@@ -53,17 +43,15 @@ class _LocationsPageState extends State<LocationsPage> {
                                         EdgeInsets.symmetric(vertical: 8),
                                     expansionCallback:
                                         (int index, bool isExpanded) {
-                                      print('$index $isExpanded');
-                                      setState(() {
-                                        isExpanded
-                                            ? expandedTileIndex = -1
-                                            : expandedTileIndex = index;
-                                      });
+                                      isExpanded
+                                          ? bloc.updateEnabledIndex(-1)
+                                          : bloc.updateEnabledIndex(index);
                                     },
                                     children: List.generate(
-                                        snapshot.data.length, (int index) {
+                                        snapshot.data['list'].length,
+                                        (int index) {
                                       Location location = Location.fromAPI(
-                                          snapshot.data[index]['data']);
+                                          snapshot.data['list'][index]['data']);
                                       return ExpansionPanel(
                                         headerBuilder:
                                             (BuildContext context, bool value) {
@@ -78,8 +66,8 @@ class _LocationsPageState extends State<LocationsPage> {
                                                 await bloc.onStarTap(
                                                     isActive, location);
                                               },
-                                              isActive: snapshot.data[index]
-                                                  ['isStarred'],
+                                              isActive: snapshot.data['list']
+                                                  [index]['isStarred'],
                                               activeIcon: Icon(
                                                 Icons.star,
                                                 color: Colors.yellow.shade500,
@@ -104,7 +92,7 @@ class _LocationsPageState extends State<LocationsPage> {
                                                 label: 'Created',
                                                 value: DateFormat('dd-mm-yyyy')
                                                     .format(DateTime.parse(
-                                                    location.created)),
+                                                        location.created)),
                                                 padding: EdgeInsets.all(0),
                                               ),
                                               MyText(
@@ -142,9 +130,11 @@ class _LocationsPageState extends State<LocationsPage> {
                                             ],
                                           ),
                                         ),
-                                        isExpanded: expandedTileIndex == index
-                                            ? true
-                                            : false,
+                                        isExpanded:
+                                            snapshot.data['enabledIndex'] ==
+                                                    index
+                                                ? true
+                                                : false,
                                         canTapOnHeader: true,
                                       );
                                     }),

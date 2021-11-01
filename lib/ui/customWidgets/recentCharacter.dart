@@ -12,6 +12,7 @@ class RecentCharacter extends StatelessWidget {
       width: 100,
       height: 100,
       child: Column(
+        crossAxisAlignment:CrossAxisAlignment.center,
         children: [
           CircleAvatar(
             backgroundImage: NetworkImage(character.image),
